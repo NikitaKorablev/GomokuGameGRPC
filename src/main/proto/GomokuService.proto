@@ -1,0 +1,45 @@
+syntax = "proto3";
+package Gomoku;
+
+service GomokuService {
+  rpc setChip (ChipInfo) returns (Response);
+  rpc startGame (Empty) returns (Response);
+  rpc nullifyGame (Empty) returns (Response);
+
+  rpc registerClient (Empty) returns (Response);
+
+  rpc subscribeToChipUpdates (ClientInfo) returns (stream ChipAddedResponse);
+  rpc subscribeToGameStatusUpdates (Empty) returns (stream GameStatusResponse);
+}
+
+message Empty {}
+
+message Response {
+  bool success = 1;
+  string message = 2;
+  bool chipIsAllow = 3;
+}
+
+message ClientInfo {
+  string client_color = 1;
+}
+
+message ChipAddedResponse {
+  ChipInfo chipInfo = 1;
+  string chipOwner = 2;
+
+  bool success = 3;
+  string message = 4;
+  bool chipIsAllow = 5;
+}
+
+message GameStatusResponse {
+  bool gameIsStarted = 1;
+  string winnerColor = 2;
+}
+
+message ChipInfo {
+  string color = 1;
+  int32 x = 2;
+  int32 y = 3;
+}
